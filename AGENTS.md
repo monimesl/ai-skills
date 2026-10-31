@@ -20,7 +20,7 @@ skills/<name>/
 
 ## Facts come from the docs
 
-Monime's docs at https://docs.monime.io are the source of truth. Copy facts from them, and never from memory. Sample data uses Sierra Leone: SLE amounts, `+232` numbers, Freetown, Bo, Kenema.
+Monime's docs at https://docs2.monime.io are the source of truth. Copy facts from them, and never from memory. Sample data uses Sierra Leone: SLE amounts, `+232` numbers, Freetown, Bo, Kenema.
 
 Generated reference files say so in their first lines. Regenerate them, never edit them:
 

@@ -2,7 +2,7 @@
 name: dash-dots
 description: Build, test and ship Dash Dots, the mini apps that run inside Monime's Dash app, with the Dot framework and the `monime dot` CLI. Use when a project has a `dot.json` or `.dml` files, or a task mentions a dot, Dash Dots, `@monimesl/dot-runtime`, `dotctl` or `monime dot`.
 license: MIT
-compatibility: Needs Node.js 22.12 or newer and the Monime CLI. Reads https://docs.monime.io when the bundled reference doesn't cover a question.
+compatibility: Needs Node.js 22.12 or newer and the Monime CLI. Reads https://docs2.monime.io when the bundled reference doesn't cover a question.
 ---
 
 # Dash Dots
@@ -26,7 +26,7 @@ Check them in this order. The first two always match the Dot version the dot bui
    - [payments.md](references/payments.md): taking a payment from order to server-side confirmation.
    - [testing.md](references/testing.md): testing controllers with `testPage`.
    - [cli.md](references/cli.md): every `monime dot` command, developer keys, and the register, publish and release flow.
-4. **The docs** at https://docs.monime.io/docs/products/dash-dots, all in one file at https://docs.monime.io/llms-dots.txt. Monime's docs MCP server (https://docs.monime.io/mcp) has `get_dash_dots_reference_monime` for one component, one `dash.*` call or `dot.json`.
+4. **The docs** at https://docs2.monime.io/docs/products/dash-dots, all in one file at https://docs2.monime.io/llms-dots.txt. Monime's docs MCP server (https://docs2.monime.io/mcp) has `get_dash_dots_reference_monime` for one component, one `dash.*` call or `dot.json`.
 
 ## Build loop
 

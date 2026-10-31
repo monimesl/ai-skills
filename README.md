@@ -38,7 +38,7 @@ The skill teaches the agent Dot's rules, where to look up every component and Da
 
 ## Docs
 
-Everything here comes from Monime's docs at [docs.monime.io](https://docs.monime.io). For Dash Dots, start at the [developer guide](https://docs.monime.io/docs/products/dash-dots/developers).
+Everything here comes from Monime's docs at [docs2.monime.io](https://docs2.monime.io). For Dash Dots, start at the [developer guide](https://docs2.monime.io/docs/products/dash-dots/developers).
 
 ## License
 

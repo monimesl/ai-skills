@@ -100,7 +100,7 @@ Anyone can change what a dot reports. The business's server delivers the goods o
 
 Every result has `reference`, `amount` and `requestId` (Dash's id, which Monime support asks for), and `orderNumber` once completed.
 
-Monime API docs for the server side: https://docs.monime.io/docs/developer-resources/guides/webhook/introduction.
+Monime API docs for the server side: https://docs2.monime.io/docs/developer-resources/guides/webhook/introduction.
 
 ## Testing payments
 

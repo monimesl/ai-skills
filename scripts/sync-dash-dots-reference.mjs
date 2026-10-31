@@ -11,7 +11,7 @@ import { readFileSync, writeFileSync } from 'node:fs';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-const DOCS_URL = 'https://docs.monime.io';
+const DOCS_URL = 'https://docs2.monime.io';
 const REFERENCE = 'content/docs/products/dash-dots/reference';
 const OUT = join(dirname(fileURLToPath(import.meta.url)), '../skills/dash-dots/references');
 
