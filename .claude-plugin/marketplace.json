@@ -1,0 +1,17 @@
+{
+  "name": "monime",
+  "owner": {
+    "name": "Monime",
+    "url": "https://monime.io"
+  },
+  "description": "Agent skills for building on Monime: Dash Dots, the Monime CLI and the Monime API.",
+  "plugins": [
+    {
+      "name": "monime-skills",
+      "source": "./",
+      "description": "Agent skills for building on Monime, starting with Dash Dots: mini apps inside Dash, built with the Dot framework and the monime CLI.",
+      "category": "development",
+      "keywords": ["monime", "dash", "dash-dots", "dot", "payments", "sierra-leone"]
+    }
+  ]
+}

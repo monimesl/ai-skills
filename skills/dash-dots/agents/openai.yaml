@@ -1,0 +1,5 @@
+interface:
+  display_name: "Dash Dots"
+  short_description: "Build, test and ship mini apps inside Dash"
+policy:
+  allow_implicit_invocation: true
