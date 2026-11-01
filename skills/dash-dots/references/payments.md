@@ -56,7 +56,7 @@ The order's rules:
 
 Optional request fields:
 
-- `methods`: the ways to pay, in the order the sheet shows them. Leave it out for all three. For example `[{ type: 'momo', providers: ['m17'] }, { type: 'link' }]`. Mobile money providers are `m17` (Orange Money) and `m18` (Africell Money). Linked accounts also take the banks `slb001`, `slb004` and `slb007`. `momo` also takes `phoneNumber`, like `+23276123456`.
+- `methods`: the ways to pay, in the order the sheet shows them. Leave it out for all three. For example `[{ type: 'momo', providers: ['m17'] }, { type: 'link' }]`. Mobile money providers are `m17` (Orange Money) and `m18` (Africell Money). A linked account is at a bank, so `link` takes only the banks `slb001`, `slb004`, `slb007`, `slb009` and `slb013`, and refuses `m17` and `m18`. `momo` also takes `phoneNumber`, like `+23276123456`.
 - `financialAccountId`: another of the Space's accounts to pay into, holding the order's currency.
 
 ## 4. Handle every ending

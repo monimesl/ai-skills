@@ -271,6 +271,29 @@ async scan() {
 
 `scanCode` needs `"camera"` in `dot.json` `permissions`.
 
+## Sign the person in
+
+```ts
+import { errorMessage, isDashError } from '@monimesl/dot-runtime';
+
+async signIn() {
+  try {
+    const person = await this.dash.account.signIn({ mode: 'simple' });
+    this.setState({ name: person.fullName, phone: person.alias, passId: person.accountIdToken });
+  } catch (error) {
+    if (isDashError(error, 'denied')) {
+      this.setState({ typeDetails: true }); // Let them type their name and number.
+      return;
+    }
+    this.setState({ note: errorMessage(error) });
+  }
+},
+```
+
+It needs `"account"` in `dot.json` `permissions`, and Dash asks the person first. `alias` is their phone number, or their email address when they have none. `accountIdToken` is the same for the person on any phone in this dot, and different in every other dot. A fresh `nonce` gives an ID for that sign-in only.
+
+The dot sends `accountIdToken` to the server itself, so the server can't tell it from a made-up one. Use it to recognise the person and fill in their details, never to open their records or money.
+
 ## Pick something on another page
 
 ```ts title="pages/profile/controller.ts"
