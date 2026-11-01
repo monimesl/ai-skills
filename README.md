@@ -1,6 +1,6 @@
 # Monime AI skills
 
-Agent skills for building on [Monime](https://monime.io). Give them to Claude Code, Codex, Cursor or any agent that reads skills, and it builds with Monime's products the way Monime's docs describe.
+Agent skills for building on [Monime](https://monime.io). Give them to Codex, Cursor, Claude Code or any agent that reads skills, and it builds with Monime's products the way Monime's docs describe.
 
 | Skill | What it does |
 | --- | --- |
@@ -10,23 +10,24 @@ More skills will follow for the Monime CLI and the Monime API.
 
 ## Install
 
-Choose one way. Installing both gives you each skill twice.
+The skills use the open [Agent Skills](https://agentskills.io) format: a `SKILL.md` and plain Markdown references, with nothing tied to one agent. Choose one way to install them. Installing more than one gives you each skill twice.
 
-**Claude Code plugin** (stays up to date when you update the marketplace):
+**With skills.sh**, for Codex, Cursor, Claude Code, OpenCode, Windsurf and others. It copies the skills into the folders your agents read:
+
+```bash
+npx skills@latest add monimesl/ai-skills
+```
+
+To add one skill only, name it: `npx skills@latest add monimesl/ai-skills --skill dash-dots`.
+
+**By hand:** copy `skills/dash-dots` into `.agents/skills/` in your project, or into your agent's own skills folder, such as `.claude/skills/` for Claude Code. To have it in every project, use the same folder in your home directory.
+
+**As a Claude Code plugin**, which stays up to date when you update the marketplace:
 
 ```bash
 claude plugin marketplace add monimesl/ai-skills
 claude plugin install monime-skills@monime
 ```
-
-**skills.sh** (copies the skills into your project, for Cursor, Codex, OpenCode, Windsurf and others):
-
-```bash
-npx skills@latest add monimesl/ai-skills
-npx skills@latest add monimesl/ai-skills --skill dash-dots
-```
-
-**By hand:** copy `skills/dash-dots` into `.claude/skills/` (Claude Code) or `.agents/skills/` in your project, or into the same folder in your home directory for every project.
 
 ## Using a skill
 
