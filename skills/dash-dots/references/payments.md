@@ -56,7 +56,7 @@ The order's rules:
 
 Optional request fields:
 
-- `methods`: the ways to pay, in the order the sheet shows them. Leave it out for all three. For example `[{ type: 'momo', providers: ['m17'] }, { type: 'link' }]`. Mobile money providers are `m17` (Orange Money) and `m18` (Africell Money). A linked account is at a bank, so `link` takes only the banks `slb001`, `slb004`, `slb007`, `slb009` and `slb013`, and refuses `m17` and `m18`. `momo` also takes `phoneNumber`, like `+23276123456`.
+- `methods`: the ways to pay, in the order the sheet shows them. Leave it out for all three. For example `[{ type: 'momo', providers: ['m17'] }, { type: 'link' }]`. Mobile money providers are `m17` (Orange Money) and `m18` (Africell Money). A linked account is at a bank, so `link` takes only the banks `slb001` (Sierra Leone Commercial Bank), `slb004` (Guaranty Trust Bank), `slb007` (Access Bank), `slb009` (Sky Bank) and `slb013` (Bloom Bank), and refuses `m17` and `m18`. `momo` also takes `phoneNumber`, like `+23276123456`.
 - `financialAccountId`: another of the Space's accounts to pay into, holding the order's currency.
 
 ## 4. Handle every ending
@@ -67,9 +67,11 @@ Optional request fields:
 | --- | --- |
 | `cancelled` | They closed the sheet. Show nothing |
 | `invalid` | Monime won't take the order (too small, a bad field). The message says what to change |
-| `denied` | The dot or Space can't take payments now, the dot isn't published yet, or Dash held the call back |
+| `denied` | The dot or Space can't take payments now, the dot isn't published yet, Dash held the call back, or this dot's payment sheet is already open |
 | `failed` | Dash couldn't reach Monime. A retry may work |
 | `timeout` | Dash stopped waiting |
+
+A second `request` while the dot's sheet is open gets `denied`, and the open sheet carries on. To stop a double tap, set the pay `Button`'s `loading` while you wait for the result.
 
 Once they pick a way to pay, it resolves with `status`: `completed`, `pending`, `expired` or `cancelled`. `request` takes no `timeout`.
 

@@ -279,10 +279,15 @@ import { errorMessage, isDashError } from '@monimesl/dot-runtime';
 async signIn() {
   try {
     const person = await this.dash.account.signIn({ mode: 'simple' });
-    this.setState({ name: person.fullName, phone: person.alias, passId: person.accountIdToken });
+    this.setState({
+      name: person.fullName,
+      phone: person.alias,
+      passId: person.accountIdToken,
+      verified: person.identityVerified === true,
+    });
   } catch (error) {
-    if (isDashError(error, 'denied')) {
-      this.setState({ typeDetails: true }); // Let them type their name and number.
+    if (isDashError(error, 'denied', 'cancelled')) {
+      this.setState({ typeDetails: true }); // They said no or closed the lock prompt, so let them type.
       return;
     }
     this.setState({ note: errorMessage(error) });
@@ -290,9 +295,85 @@ async signIn() {
 },
 ```
 
-It needs `"account"` in `dot.json` `permissions`, and Dash asks the person first. `alias` is their phone number, or their email address when they have none. `accountIdToken` is the same for the person on any phone in this dot, and different in every other dot. A fresh `nonce` gives an ID for that sign-in only.
+It needs `"account"` in `dot.json` `permissions`. Dash asks the person first, then has them confirm it's them with the phone's lock: closing that prompt rejects with `cancelled`, and a lock that can't confirm them with `failed`. `alias` is their phone number, or their email address when they have none. `accountIdToken` is the same for the person on any phone in this dot, and different in every other dot. A fresh `nonce` gives an ID for that sign-in only. `identityVerified` says whether Monime has verified who they are. An older Dash leaves it out, so treat a missing one as not verified.
 
-The dot sends `accountIdToken` to the server itself, so the server can't tell it from a made-up one. Use it to recognise the person and fill in their details, never to open their records or money.
+The dot sends `accountIdToken` and `identityVerified` to the server itself, so the server can't tell them from made-up ones. Use them to recognise the person and fill in their details, never to open their records or money.
+
+## Remind the person
+
+A reminder is a notification at a time the dot sets. Tapping it opens the dot at a page, the way a share link does, so that page lists the launch options the reminder carries in `share.options`.
+
+```ts title="pages/fees/controller.ts"
+// At the top: import { errorMessage, isDashError } from '@monimesl/dot-runtime';
+
+async remind(state) {
+  try {
+    await this.dash.reminders.set({
+      key: `fees-${state.student}`,
+      title: 'School fees are due today',
+      message: "Tap to pay this term's fees.",
+      page: `/pay?student=${state.student}`,
+      schedule: { start: '2026-11-27', time: '08:00', repeat: { every: 'month', days: [27] }, end: { after: 3 } },
+    });
+    this.setState({ reminded: true });
+  } catch (error) {
+    this.setState({ note: isDashError(error, 'denied') ? 'Turn on reminders for this dot to be reminded.' : errorMessage(error) });
+  }
+},
+```
+
+```ts title="pages/pay/controller.ts"
+export default definePage({
+  initialState: state,
+  share: { options: ['student'] },
+  hooks: {
+    onLoad(options) {
+      this.setState({ student: options.student ?? '' });
+    },
+  },
+});
+```
+
+- It needs `"reminders"` in `dot.json` `permissions`. Dash asks the first time `set` runs. `cancel(key)` and `list()` only need it declared.
+- `key` is the dot's own name for it. Setting the same key again changes that reminder.
+- `page` is `/`, the page id and its options as a query. Without `share` on that page, the person lands on the first page and Dash says the link isn't valid. Leave `page` out to open the first page.
+- `schedule.time` defaults to 09:00 on the phone's clock. `repeat` is `once` (the default), `dates`, `day`, `week` or `month`, and `end` stops it on a date or after so many times. See `ReminderSchedule` in [dash-api.md](dash-api.md).
+- A dot can have 12 reminders still to come. Past that, `set` fails with `failed`.
+- People can delete reminders in Dash, so read `list()` before showing one as set.
+- In a live test, `set` fails with `denied` until the dot is published.
+
+## A page's own navigation
+
+For tabs that stay on screen, put `Tabs` with `variant="bar"` in a `Pinned`, last in the root `View`, and hide Dash's own tab bar on that page.
+
+```xml title="pages/index/view.dml"
+<View>
+  <View hidden="{{ tab !== 'home' }}">
+    <Text>Today's specials</Text>
+  </View>
+  <View hidden="{{ tab !== 'orders' }}">
+    <Text>Your orders</Text>
+  </View>
+  <Pinned edge="bottom" border="subtle">
+    <Tabs variant="bar" value="{{ tab }}" onChange="setTab">
+      <Tab value="home" label="Home" icon="home" />
+      <Tab value="orders" label="Orders" icon="receipt" badge="{{ newOrders }}" />
+    </Tabs>
+  </Pinned>
+</View>
+```
+
+```ts title="pages/index/controller.ts"
+export default definePage({
+  initialState: state,
+  configs: { tabBar: { hidden: true } },
+  mutations: {
+    setTab: (_state, event: ValueEvent) => ({ tab: event.detail.value }),
+  },
+});
+```
+
+`hidden` keeps each tab's content alive, so a list keeps its scroll position. Use `<If>` instead when a tab should start afresh. A bottom `Pinned` replaces a `Footer`: use one or the other.
 
 ## Pick something on another page
 
@@ -379,4 +460,4 @@ export default defineDot({
 });
 ```
 
-Set as few colours as you can, and Dash derives the rest. A page sets its own bar with `configs.navigationBar` in `definePage` or `this.setNavigationBar()`. A title that names Dash or Monime shows the dot's name instead. When a page hides the bar, keep its top right corner free for Dash's menu capsule.
+Set as few colours as you can, and Dash derives the rest. Fonts, density, shadows, gradients, component defaults, your own variants and icons are in [theming.md](theming.md). A page sets its own bar with `configs.navigationBar` in `definePage` or `this.setNavigationBar()`. A title that names Dash or Monime shows the dot's name instead. When a page hides the bar, keep its top right corner free for Dash's menu capsule.

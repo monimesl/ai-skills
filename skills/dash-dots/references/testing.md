@@ -103,4 +103,6 @@ expect(cart.mutations?.add?.({ items: 1, quantity: 1 }, createEvent('tap'))).toE
 
 ## What tests don't cover
 
-`testPage` doesn't draw the view or check that state is plain data. `monime dot build` checks the view, and the simulator shows it.
+`testPage` doesn't draw the view or check that state is plain data. `monime dot build` checks the view, and the simulator shows it. The simulator keeps Dash's limits (6 requests at once, 200 files and 512 MB from Dash calls each run) and holds back calls that act for the person while its tab is hidden, as Dash does while the person is in another app.
+
+Because a test draws no page, `this.captureView()` gives an empty picture. It still saves that picture with Dash, so fake `dash.storage.file.write` and `dash.storage.file.open`.
